@@ -17,8 +17,9 @@ mod syntax;
 mod terminal;
 
 #[cfg_attr(windows, path = "windows.rs")]
-#[cfg_attr(unix, path = "unix.rs")]
+#[cfg_attr(any(unix, target_os = "twizzler"), path = "unix.rs")]
 #[cfg_attr(target_os = "wasi", path = "wasi.rs")]
 mod sys;
 
-#[cfg(any(unix, target_os = "wasi"))] mod xdg;
+#[cfg(any(unix, target_os = "wasi", target_os = "twizzler"))]
+mod xdg;

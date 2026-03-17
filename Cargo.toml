@@ -28,7 +28,10 @@ repository.workspace = true
 unicode-width = "0.2.2"
 
 [target.'cfg(unix)'.dependencies]
-libc = "0.2.182"
+libc = { path = "../libc" }
+
+[target.'cfg(target_os = "twizzler")'.dependencies]
+libc = { path = "../libc" }
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", default-features = false, features = ["wincon"] }
@@ -50,8 +53,8 @@ debug = true
 
 [profile.release]
 codegen-units = 1
-lto = true
-panic = "abort"
+lto = false
+panic = "unwind"
 strip = "symbols"
 
 [lints]
