@@ -55,7 +55,6 @@ debug = true
 codegen-units = 1
 lto = false
 panic = "unwind"
-strip = "symbols"
 
 [lints]
 workspace = true
