@@ -49,13 +49,13 @@ extern "C" fn handle_wsize(_: c_int, _: *mut siginfo_t, _: *mut c_void) { WSC.st
 /// changes. After calling this function, use `has_window_size_changed` to query
 /// the global variable.
 pub fn register_winsize_change_signal_handler() -> io::Result<()> {
-    return Ok(());
     unsafe {
         let mut maybe_sa = std::mem::MaybeUninit::<sigaction>::uninit();
         cerr(libc::sigemptyset(&raw mut (*maybe_sa.as_mut_ptr()).sa_mask))?;
         // We could use sa_handler here, however, sigaction defined in libc does not
         // have sa_handler field, so we use sa_sigaction instead.
-        (*maybe_sa.as_mut_ptr()).sa_flags = SA_SIGINFO;
+        // mlibc's sa_flags is `unsigned long`, while the SA_* constants are ints.
+        (*maybe_sa.as_mut_ptr()).sa_flags = SA_SIGINFO as _;
         (*maybe_sa.as_mut_ptr()).sa_sigaction = handle_wsize as *const () as sighandler_t;
         cerr(sigaction(libc::SIGWINCH, maybe_sa.as_ptr(), std::ptr::null_mut()))
     }
